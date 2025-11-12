@@ -1,14 +1,16 @@
-from typing import List
 import math
+from typing import List
+
 import torch
 import torch.nn.functional as F
 
-from xfuser.core.long_ctx_attention import xFuserLongContextAttention
 from xfuser.core.cache_manager.cache_manager import get_cache_manager
+from xfuser.core.long_ctx_attention import xFuserLongContextAttention
+
 if torch.cuda.is_available():
-    from yunchang.ring.utils import RingComm, update_out_and_lse
+    from yunchang.kernels import AttnType, select_flash_attn_impl
     from yunchang.ring.ring_flash_attn import RingFlashAttnFunc
-    from yunchang.kernels import select_flash_attn_impl, AttnType
+    from yunchang.ring.utils import RingComm, update_out_and_lse
 else:
     RingComm = object
     RingFlashAttnFunc = object
@@ -249,9 +251,12 @@ def xdit_ring_flash_attn_func(
             joint_tensor_key,
             joint_tensor_value,
             joint_strategy,
-            q_descale=q_descale,
-            k_descale=k_descale,
-            v_descale=v_descale
+            q_descale,
+            k_descale,
+            v_descale,
+            # q_descale=q_descale,
+            # k_descale=k_descale,
+            # v_descale=v_descale
         )
     else:
         return xFuserRingFlashAttnFunc.apply(
