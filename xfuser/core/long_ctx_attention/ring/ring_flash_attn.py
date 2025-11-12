@@ -251,9 +251,9 @@ def xdit_ring_flash_attn_func(
             joint_tensor_key,
             joint_tensor_value,
             joint_strategy,
-            q_descale,
-            k_descale,
-            v_descale,
+            # q_descale,
+            # k_descale,
+            # v_descale,
             # q_descale=q_descale,
             # k_descale=k_descale,
             # v_descale=v_descale
